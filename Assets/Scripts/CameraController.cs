@@ -10,6 +10,8 @@ public class CameraController : MonoBehaviour
     private Transform bossPos;
     private PlayerController playerController;
 
+    private float rotationSpeed = 15f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,24 +19,26 @@ public class CameraController : MonoBehaviour
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         bossPos = GameObject.FindWithTag("Boss").transform;
 
-      
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = playerPos.position + offset;
+        CameraMovement();
 
-        if (playerController.isArena) {
-            
-        
-        }
-        
     }
 
     public void TranslateCamera() {
 
         Vector3.Lerp(offset, arenaOffset, 0.5f);
         offset = arenaOffset;
+    }
+
+    private void CameraMovement() {
+        transform.position = playerPos.position + offset;
+
+        float mouseInput = Input.GetAxis("Mouse X");
+        transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime * mouseInput, Space.World);
+
     }
 }
